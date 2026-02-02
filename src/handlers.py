@@ -18,7 +18,7 @@ async def run_logic(message: types.Message, cookies: list):
     status_msg = await message.answer("📡 <b>Проверка запущена...</b>", parse_mode="HTML")
     
     results = await checker.process_cookies(cookies)
-    reporter = ReportGenerator(results, start_time)
+    reporter = ReportGenerator(results, start_time, admin_id=message.from_user.id)
     
     report_text = reporter.generate_stats_message()
     zip_path = reporter.create_files()
@@ -48,4 +48,5 @@ async def file_handler(message: types.Message, bot):
     cookies = extract_cookies(content)
     if cookies:
         await message.answer(f"📥 Файл принят. Найдено: {len(cookies)}")
+
         await run_logic(message, cookies)
